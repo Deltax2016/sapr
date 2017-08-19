@@ -9,7 +9,7 @@
 <script type="text/javascript" src="point.js"></script>
 <script type="text/javascript" src="game.js"></script>
 <script type="text/javascript">
-	var js = new PointJS('2D',1300,2000,{backgroundColor: '#11ff11'});
+	var js = new PointJS('2D',920,640,{backgroundColor: '#11ff11'});
 	var game = js.game;
 	var log = js.system.log;
 	var camera = pjs.camera;
@@ -19,12 +19,16 @@
 	var key = js.keyControl.initKeyControl();
 	var mouse = js.mouseControl.initMouseControl();
 	var bool = 0;
+	var x1;
+	var y1;
+	var x2;
+	var y2;
 	game.newLoopFromConstructor('SAPR',function() {
 		var electro = game.newImageObject({
 			x: 0,
 			y: 0,
-			w: 1300,
-			h: 2000,
+			w: 2600,
+			h: 4000,
 			file: 'original.png'});
 		var point = game.newImageObject({
 			x: 0,
@@ -32,23 +36,61 @@
 			w: 32,
 			h: 32,
 			file: 'point.png'});
+		var text = game.newTextObject( { 
+  		x : 720, 
+  		y : 0, 
+		w: 200,
+		h: 300,
+  		text : "text", 
+  		size : 20, 
+  		padding : 20, 
+  		color : "#ff1111", 
+  		alpha : 1
+		});
 		this.update = function () {
 			game.clear();
-			if (bool = 0)
+			if (mouse.isDown("LEFT"))
 			{
-			point.x= mouse.getPosition().x;
-			point.y=mouse.getPosition().y;
-			}
-			if (mouse.isPress("LEFT"))
+			bool = 0; 
+			} else bool = 1;
+			if (key.isDown('RIGHT'))
 			{
-				if (bool = 1) bool = 0; else bool = 1;
+      		electro.x += -4;
+			point.x+= -4;
+			x2+= -4;
 			}
+    			else if (key.isDown('LEFT')&&(electro.x!=0))
+      		{
+      		electro.x += 4;
+			point.x+= 4;
+			x2 += 4;
+			}
+    			if (key.isDown('DOWN'))
+      		{
+      		electro.y += -4;
+			point.y+= -4;
+			y2 += -4;
+			}
+    			else if (key.isDown('UP') && (electro.y!=0))
+      		{
+      		electro.y += 4;
+			point.y+= 4;
+			y2 += 4;
+			}
+			if (bool == 0)
+			{
+			point.x= mouse.getPosition().x-16;
+			point.y=mouse.getPosition().y-30;
+			x1 = point.x;
+			y1 = point.y;
+			}
+			text.text = "x: " + x1 + "\n" + "y: " + y1;
 			electro.draw();
 			point.draw();
-			camera.follow(point, 1);
+			text.draw();
 		}
 	});
 	game.startLoop('SAPR');
-</script>>
+</script>
 </body>
 </html>
