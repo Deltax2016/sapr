@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width,user-scalable=no"/>
+	<title>electro</title>
+</head>
+<body>
+<script type="text/javascript" src="point.js"></script>
+<script type="text/javascript" src="game.js"></script>
+<script type="text/javascript">
+	var js = new PointJS('2D',1300,2000,{backgroundColor: '#11ff11'});
+	var game = js.game;
+	var log = js.system.log;
+	var camera = pjs.camera;
+	var point = js.vector.point;
+	var weight = game.getWH().w;
+	var height = game.getWH().h;
+	var key = js.keyControl.initKeyControl();
+	var mouse = js.mouseControl.initMouseControl();
+	var bool = 0;
+	game.newLoopFromConstructor('SAPR',function() {
+		var electro = game.newImageObject({
+			x: 0,
+			y: 0,
+			w: 1300,
+			h: 2000,
+			file: 'original.png'});
+		var point = game.newImageObject({
+			x: 0,
+			y: 0,
+			w: 32,
+			h: 32,
+			file: 'point.png'});
+		this.update = function () {
+			game.clear();
+			if (bool = 0)
+			{
+			point.x= mouse.getPosition().x;
+			point.y=mouse.getPosition().y;
+			}
+			if (mouse.isPress("LEFT"))
+			{
+				if (bool = 1) bool = 0; else bool = 1;
+			}
+			electro.draw();
+			point.draw();
+			camera.follow(point, 1);
+		}
+	});
+	game.startLoop('SAPR');
+</script>>
+</body>
+</html>
