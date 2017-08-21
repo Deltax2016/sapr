@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+    <head>
+        <title>rectExample</title>
+        <meta charset='utf-8' />
+    </head>
+    <body>
+        <canvas id='example'>Обновите браузер</canvas>
+        <script>
+            var example = document.getElementById("example"),
+			    ctx     = example.getContext('2d');
+				window.addEventListener('keydown',this.check,false);
+				example.width = 640;
+				example.height = 480;
+				var img = new Image();
+				img.src = 'myImage.png'; 
+				img.onload = function() { 
+				ctx.drawImage(img,0,0);
+				}
+				function check(e) {
+				alert(e.keyCode);
+			}
+            function check(e) {
+			var code = e.keyCode;
+			switch (code) {
+			case 37: alert("Left"); break; //Left key
+			case 38: alert("Up"); break; //Up key
+			case 39: alert("Right"); break; //Right key
+			case 40: alert("Down"); break; //Down key
+			default: alert(code); //Everything else
+			}
+		}
+        </script>
+    </body>
+</html>

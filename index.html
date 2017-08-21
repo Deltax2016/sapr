@@ -11,6 +11,7 @@
 <script type="text/javascript">
 	var js = new PointJS('2D',920,640,{backgroundColor: '#11ff11'});
 	var game = js.game;
+	//var brush = js.brush;
 	var log = js.system.log;
 	var camera = pjs.camera;
 	var point = js.vector.point;
@@ -19,17 +20,26 @@
 	var key = js.keyControl.initKeyControl();
 	var mouse = js.mouseControl.initMouseControl();
 	var bool = 0;
-	var x1;
-	var y1;
-	var x2;
-	var y2;
+	var x1 = 0;
+	var y1 = 0;
+	var x2 = 0;
+	var y2 = 0;
+	var color;
+	var c;
 	game.newLoopFromConstructor('SAPR',function() {
 		var electro = game.newImageObject({
-			x: 0,
+			x: 240,
 			y: 0,
 			w: 2600,
 			h: 4000,
 			file: 'original.png'});
+		var hud = game.newRectObject({
+			x: 0,
+			y: 0,
+			w: 240,
+			h: 640,
+			fillColor : "#723599", 
+		});
 		var point = game.newImageObject({
 			x: 0,
 			y: 0,
@@ -37,7 +47,7 @@
 			h: 32,
 			file: 'point.png'});
 		var text = game.newTextObject( { 
-  		x : 720, 
+  		x : 620, 
   		y : 0, 
 		w: 200,
 		h: 300,
@@ -47,31 +57,77 @@
   		color : "#ff1111", 
   		alpha : 1
 		});
+		var text1 = game.newTextObject( { 
+  		x : 0, 
+  		y : 0, 
+		w: 200,
+		h: 25,
+  		text : "Необходимое", 
+  		size : 25, 
+  		//padding : 20, 
+  		color : "#ffffff", 
+  		alpha : 1
+		});
+		var text2 = game.newTextObject( { 
+  		x : 0, 
+  		y : 25, 
+		w: 200,
+		h: 25,
+  		text : "потребление КВт", 
+  		size : 25, 
+  		//padding : 20, 
+  		color : "#ffffff", 
+  		alpha : 1
+		});
+		var editor = js.system.newDOM('textarea', true);
+		editor.style.backgroundColor = 'transparent';
+		editor.style.padding = '60px 0px 0px 0px';
+		editor.style.color = 'white';
+		//editor.style.border = '2px solid white';
+		editor.style.width = 100 + 'px';
+		editor.style.height = 100 + 'px';
+		editor.style.font = 'bold 20px';
+		editor.value = 'ok';
 		this.update = function () {
 			game.clear();
 			if (mouse.isDown("LEFT"))
 			{
 			bool = 0; 
+			//c = ctx.getImageData(mouse.x, mouse.y, 1, 1).data;
 			} else bool = 1;
-			if (key.isDown('RIGHT'))
+			if (key.isDown('RIGHT') && (electro.x>-electro.w+920))
 			{
       		electro.x += -4;
 			point.x+= -4;
 			x2+= -4;
 			}
-    			else if (key.isDown('LEFT')&&(electro.x!=0))
+    		else if (key.isDown('LEFT')&&(electro.x<240))
       		{
       		electro.x += 4;
 			point.x+= 4;
 			x2 += 4;
 			}
-    			if (key.isDown('DOWN'))
+    		if (key.isDown('DOWN') && (electro.y>-electro.h+640))
       		{
       		electro.y += -4;
 			point.y+= -4;
 			y2 += -4;
 			}
-    			else if (key.isDown('UP') && (electro.y!=0))
+			if (key.isPress('1'))
+      		{
+      		electro.w /=2;
+			electro.h /=2;
+			electro.x =x1/2-700;
+			electro.y =y1/2 - 320;
+			}
+			if (key.isPress('2'))
+      		{
+      		electro.w *=2;
+			electro.h *=2;
+			electro.x =x1/2-700;
+			electro.y =y1/2 - 320;
+			}
+    		else if (key.isDown('UP') && (electro.y!=0))
       		{
       		electro.y += 4;
 			point.y+= 4;
@@ -81,13 +137,16 @@
 			{
 			point.x= mouse.getPosition().x-16;
 			point.y=mouse.getPosition().y-30;
-			x1 = point.x;
-			y1 = point.y;
+			x1 = point.x - x2;
+			y1 = point.y - y2;
 			}
-			text.text = "x: " + x1 + "\n" + "y: " + y1;
+			text.text = "x: " + x1  + " y: " + y1 + " Text: "+ c;
 			electro.draw();
 			point.draw();
 			text.draw();
+			hud.draw();
+			text1.draw();
+			text2.draw();
 		}
 	});
 	game.startLoop('SAPR');
